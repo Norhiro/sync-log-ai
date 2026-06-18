@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SyncLog-AI: Binary-Optimized, Self-Healing Context Management
 
 AIエージェント（Claude Code, Codex等）との共同作業において、Markdownファイルだけでの履歴管理は、大規模プロジェクトでは非効率的かつ高コストになりがちです。
@@ -25,3 +26,18 @@ AIエージェント（Claude Code, Codex等）との共同作業において、
 ### 1. Installation
 ```bash
 pip install msgpack watchdog
+=======
+タイトル: SyncLog-AI: Binary-Optimized, Self-Healing Context Management
+
+Problem: 「Markdownだけのログ管理は、大規模AI環境では遅く、コストが高く、整合性が取れない」と記述。
+
+Solution: 「本システムはバイナリ同期とチェックデジット監査により、AIの迷走を物理的に防ぎ、推論コストを削減する」と定義。
+
+Features:
+
+	Binary Sync: JSON/MDとMessagePackの完全同期。
+
+	Self-Healing: 監査プログラムによる自動再構築。
+
+	Cost Efficient: コンテキストの構造化によるAPI節約。
+>>>>>>> dbcdfa5 (Initial commit: AI-driven binary log sync engine)
