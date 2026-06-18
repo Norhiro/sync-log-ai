@@ -1,0 +1,16 @@
+# AI-Agent Operational Rules (SyncLog-AI)
+system:
+  context_dir: ".ai_context"
+  monitor_file: "work.md"
+  
+audit:
+  random_range: [15, 25]  # 15回〜25回に一度の確率で監査
+  log_file: ".ai_context/audit_history.log"
+  auto_repair: true      # 乖離があった場合に自動修復するか
+
+ai_directives:
+  # AIエージェントへの自動的な役割定義
+  persona: "You are an expert engineer. Keep the work log consistent."
+  critical_rules:
+    - "Always verify hash before starting new task."
+    - "If audit fails, stop and wait for manual intervention."
