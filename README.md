@@ -91,3 +91,9 @@ python random_auditor.py
 Do not commit local runtime artifacts such as virtual environments, Python caches, or `.ai_context/memory.bin`. The included `.gitignore` excludes these files.
 
 ローカル実行で生成される `venv/`、`__pycache__/`、`.ai_context/memory.bin` などは公開リポジトリに含めないでください。このリポジトリの `.gitignore` では、それらを除外しています。
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
+
+このプロジェクトは MIT License の下で公開されています。詳細は `LICENSE` を参照してください。
