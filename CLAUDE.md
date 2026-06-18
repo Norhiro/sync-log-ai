@@ -1,18 +1,37 @@
 # Project Sync-log-ai Configuration
 
-本プロジェクトは、AIエージェントとの協調作業における「メモリ同期プロトコル」を採用しています。AIは以下のルールを厳守してください。
+This project uses a memory synchronization protocol for AI-agent collaboration. AI agents must follow the rules below.
+
+本プロジェクトは、AI エージェントとの協調作業におけるメモリ同期プロトコルを採用しています。AI は以下のルールを厳守してください。
 
 ## Memory Synchronization Protocol
-- **作業終了時**: 必ず `python sync_engine.py` を実行し、現在の作業状態を `.ai_context/memory.bin` に同期してください。
-- **作業再開時**: プロジェクトの文脈把握のため、`.ai_context/memory.bin` に保存された前回の状態を読み込み、終了地点からタスクを継続してください。
-- **整合性担保**: 監査機能（Audit）が稼働しています。`work.md` とバイナリログのハッシュ値が一致していることを常に意識してください。
-- **保存の徹底**: 新規ファイル作成や既存ファイルの編集を行った際は、必ず保存操作を実行してください。
-- **保存後の検証**: ファイル操作（作成・変更）を行った後は、必ず `ls` (または `dir`) コマンドで対象ファイルが存在し、タイムスタンプが更新されていることを**AI自身で確認**してください。
-- **作業記録の更新**: ファイル作成時には、必ず `work.md` に「どのファイルを、何の目的で作成したか」を追記してください。
-- **同期のトリガー**: ファイル作成・編集が完了し、`work.md` への記録が終わった後に、必ず `python sync_engine.py` を実行して状態をメモリに確定させてください。
 
+- **Before starting work / 作業開始前**: Check the current state of `work.md` and, when available, `.ai_context/memory.bin`.
+- **After finishing work / 作業終了時**: Run `python sync_engine.py` to synchronize the current work state into `.ai_context/memory.bin`.
+- **When resuming work / 作業再開時**: Read the previous state saved in `.ai_context/memory.bin` when available, then continue from the last recorded point.
+- **Consistency / 整合性担保**: The audit flow compares `work.md` with the binary memory hash. Keep both in sync.
+- **Saving files / 保存の徹底**: Save every new or modified file before running synchronization.
+- **Verification after edits / 保存後の検証**: After creating or modifying files, verify that the target files exist and that timestamps or Git status reflect the change.
+- **Work log updates / 作業記録の更新**: When creating or editing files, update `work.md` with what changed and why.
+- **Sync trigger / 同期のトリガー**: After file edits and `work.md` updates are complete, run `python sync_engine.py`.
 
+## Commands
+
+```bash
+python sync_engine.py
+python auditor.py
+python random_auditor.py
+```
 
 ## Directory Structure
-- `.ai_context/`: システムメモリ（バイナリ・監査ログ）
-- `work.md`: 作業ログ（人間が閲覧・編集するメインファイル）
+
+- `.ai_context/`: System memory directory for binary memory and audit logs.
+- `work.md`: Human-readable work log.
+- `rules.yaml`: Protocol configuration.
+
+## Public Repository Notes
+
+Do not commit local runtime artifacts such as `.ai_context/memory.bin`, audit logs, virtual environments, or Python cache files.
+
+`.ai_context/memory.bin`、監査ログ、仮想環境、Python キャッシュなどのローカル生成物はコミットしないでください。
+

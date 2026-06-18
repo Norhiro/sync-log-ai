@@ -1,41 +1,87 @@
 # SyncLog-AI: Binary-Optimized, Self-Healing Context Management
 
-AIエージェント（Claude Code, Codex等）との共同作業において、Markdownファイルだけでの履歴管理は、大規模プロジェクトでは非効率的かつ高コストになりがちです。
+SyncLog-AI is a lightweight memory synchronization protocol for AI-assisted development. It keeps a human-readable Markdown work log and a compact MessagePack binary snapshot in sync, then verifies the two with a SHA-256 hash.
 
-`SyncLog-AI` は、**人間用の可読性（Markdown）とシステム用の超高速・低コスト性能（バイナリ同期）を両立**させる、AIエージェントのための新しいログ管理プロトコルです。
-
-
+SyncLog-AI は、AI エージェントとの共同作業向けの軽量なメモリ同期プロトコルです。人間が読める Markdown の作業ログと、AI や自動処理が扱いやすい MessagePack バイナリスナップショットを同期し、SHA-256 ハッシュで整合性を確認します。
 
 ## Why SyncLog-AI?
 
-従来のAIワークフローにおける以下の課題を解決します。
-* **高コストな入力トークン**: 全ての履歴をテキストで読み込む必要はありません。バイナリからの必要な文脈のみの抽出でトークン消費を最小化。
-* **AIの迷走とハルシネーション**: チェックデジットによる整合性担保と、監査プログラムによる軌道修正で、AIの思考の迷走を即座に検知。
-* **速度低下**: ファイルサイズ肥大化によるパース時間を、MessagePackバイナリ構造で極小化。
+Large AI-assisted projects often accumulate long Markdown histories. Reading the whole history every time can be slow, expensive, and error-prone. SyncLog-AI separates the human log from the machine snapshot so agents can resume work from a consistent state.
 
-## Key Features
+大規模な AI 共同作業では、Markdown の履歴が長くなりがちです。毎回すべての履歴を読み込むと、遅く、高コストで、整合性も崩れやすくなります。SyncLog-AI は人間向けログと機械向けスナップショットを分けることで、AI が一貫した状態から作業を再開しやすくします。
 
-- **Binary-Text Dual Sync**: 人間が見るMarkdownと、AIが処理するMessagePackバイナリを同期。
-- **Self-Healing Audit Loop**: 乖離を検知し、AI自身の思考を正しいベクトルへ戻す監査機能を搭載。
-- **Anchor Prompt System**: 作業再開時に自動で文脈を注入し、思考の断絶を防ぐ。
-- **Cost Efficiency**: コンテキストのキャッシュ最適化により、API利用料を削減。
+## Features
+
+- **Binary-text sync / バイナリとテキストの同期**: Stores `work.md` in `.ai_context/memory.bin` as MessagePack.
+- **Hash verification / ハッシュ検証**: Compares the current Markdown content with the hash stored in the binary snapshot.
+- **Self-repair audit / 自動修復監査**: `auditor.py` detects drift and regenerates the binary snapshot from `work.md`.
+- **Random audit hook / 抜き打ち監査**: `random_auditor.py` runs the audit occasionally for agent or CI workflows.
+- **Config file / 設定ファイル**: `rules.yaml` defines paths and operational rules.
+
+## Requirements
+
+- Python 3.10 or later is recommended.
+- Required Python packages:
+  - `msgpack`: serializes the memory snapshot to MessagePack.
+  - `PyYAML`: reads `rules.yaml`.
+
+`watchdog` is not required by the current codebase. Add it only if you later implement file watching.
+
+## Installation
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+On macOS or Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
 ## Quick Start
 
-### 1. Installation
+1. Write your current work state in `work.md`.
+
+2. Synchronize the Markdown log to the binary memory file:
+
 ```bash
-pip install msgpack watchdog
-=======
-タイトル: SyncLog-AI: Binary-Optimized, Self-Healing Context Management
+python sync_engine.py
+```
 
-Problem: 「Markdownだけのログ管理は、大規模AI環境では遅く、コストが高く、整合性が取れない」と記述。
+This creates or updates `.ai_context/memory.bin`.
 
-Solution: 「本システムはバイナリ同期とチェックデジット監査により、AIの迷走を物理的に防ぎ、推論コストを削減する」と定義。
+3. Run the audit:
 
-Features:
+```bash
+python auditor.py
+```
 
-	Binary Sync: JSON/MDとMessagePackの完全同期。
+If `work.md` and `.ai_context/memory.bin` differ, the audit regenerates the binary file from `work.md`. In that case, `auditor.py` exits with code `1` after repair so CI or agents can notice that drift occurred.
 
-	Self-Healing: 監査プログラムによる自動再構築。
+4. Optionally run a random audit:
 
-	Cost Efficient: コンテキストの構造化によるAPI節約。
+```bash
+python random_auditor.py
+```
+
+## File Overview
+
+- `work.md`: Human-readable work log.
+- `sync_engine.py`: Converts `work.md` into `.ai_context/memory.bin` and verifies hashes.
+- `auditor.py`: Checks consistency and repairs binary memory when drift is detected.
+- `random_auditor.py`: Runs audits occasionally.
+- `rules.yaml`: Operational settings for the protocol.
+- `CLAUDE.md`: Agent-facing operating rules, written in Japanese and English.
+- `AGENTS.md`: Codex-facing operating rules, written in Japanese and English.
+- `requirements.txt`: Python package dependencies.
+
+## Notes for Public Repositories
+
+Do not commit local runtime artifacts such as virtual environments, Python caches, or `.ai_context/memory.bin`. The included `.gitignore` excludes these files.
+
+ローカル実行で生成される `venv/`、`__pycache__/`、`.ai_context/memory.bin` などは公開リポジトリに含めないでください。このリポジトリの `.gitignore` では、それらを除外しています。
