@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SyncLog-AI: Binary-Optimized, Self-Healing Context Management
 
 AIエージェント（Claude Code, Codex等）との共同作業において、Markdownファイルだけでの履歴管理は、大規模プロジェクトでは非効率的かつ高コストになりがちです。
@@ -40,4 +39,3 @@ Features:
 	Self-Healing: 監査プログラムによる自動再構築。
 
 	Cost Efficient: コンテキストの構造化によるAPI節約。
->>>>>>> dbcdfa5 (Initial commit: AI-driven binary log sync engine)
