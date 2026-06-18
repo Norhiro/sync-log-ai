@@ -1,14 +1,20 @@
 # SyncLog-AI: Binary-Optimized, Self-Healing Context Management
 
-SyncLog-AI is a lightweight memory synchronization protocol for AI-assisted development. It keeps a human-readable Markdown work log and a compact MessagePack binary snapshot in sync, then verifies the two with a SHA-256 hash.
+> Status: Prototype
+>
+> SyncLog-AI is currently an experimental prototype. It demonstrates Markdown-to-MessagePack synchronization and hash-based consistency checks, but it is not yet a production-ready logging framework.
+>
+> SyncLog-AI は現在、実験的なプロトタイプです。Markdown と MessagePack の同期、およびハッシュによる整合性確認を検証する段階であり、まだ本番利用向けのログ管理基盤ではありません。
 
-SyncLog-AI は、AI エージェントとの共同作業向けの軽量なメモリ同期プロトコルです。人間が読める Markdown の作業ログと、AI や自動処理が扱いやすい MessagePack バイナリスナップショットを同期し、SHA-256 ハッシュで整合性を確認します。
+SyncLog-AI is a lightweight memory synchronization experiment for AI-assisted development. It keeps a human-readable Markdown work log and a compact MessagePack binary snapshot in sync, then verifies the two with a SHA-256 hash.
+
+SyncLog-AI は、AI エージェントとの共同作業向けの軽量なメモリ同期実験プロジェクトです。人間が読める Markdown の作業ログと、AI や自動処理が扱いやすい MessagePack バイナリスナップショットを同期し、SHA-256 ハッシュで整合性を確認します。
 
 ## Why SyncLog-AI?
 
-Large AI-assisted projects often accumulate long Markdown histories. Reading the whole history every time can be slow, expensive, and error-prone. SyncLog-AI separates the human log from the machine snapshot so agents can resume work from a consistent state.
+Large AI-assisted projects often accumulate long Markdown histories. Reading the whole history every time can be slow, expensive, and error-prone. SyncLog-AI explores whether separating the human log from the machine snapshot can help agents resume work from a more consistent state.
 
-大規模な AI 共同作業では、Markdown の履歴が長くなりがちです。毎回すべての履歴を読み込むと、遅く、高コストで、整合性も崩れやすくなります。SyncLog-AI は人間向けログと機械向けスナップショットを分けることで、AI が一貫した状態から作業を再開しやすくします。
+大規模な AI 共同作業では、Markdown の履歴が長くなりがちです。毎回すべての履歴を読み込むと、遅く、高コストで、整合性も崩れやすくなります。SyncLog-AI は人間向けログと機械向けスナップショットを分けることで、AI がより一貫した状態から作業を再開できるかを検証します。
 
 ## Features
 
