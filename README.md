@@ -28,19 +28,26 @@ Large AI-assisted projects often accumulate long Markdown histories. Reading the
 >
 > その問題を、AI に渡す前に解決するのが「Headroom」。
 
-[Headroom](https://github.com/netflix/headroom) compresses text before sending it to AI — reversibly, with up to 95% token reduction per API call.
+[Headroom](https://github.com/chopratejas/headroom) is a local-first context compression layer built on a Rust core with Python bindings. It compresses tool outputs, logs, RAG chunks, and files before they reach the LLM — reversibly (CCR: Cached Compressed Retrieval), with 60–95% token reduction. Benchmarks on GSM8K, TruthfulQA, and SQuAD v2 show accuracy is maintained or improved.
 
-SyncLog-AI solves a different problem: **session continuity**. It does not compress what you send to AI; instead it maintains a verified snapshot of your work state so agents can resume from a consistent point without re-reading the entire Markdown history.
+SyncLog-AI addresses a different problem: **work-state consistency across sessions**. It does not reduce what you send to the AI; instead it keeps a hash-verified MessagePack snapshot of `work.md` so agents can resume from a consistent point without re-reading the full Markdown history.
 
 | | SyncLog-AI | Headroom |
 |---|---|---|
 | **Goal** | Session state consistency | Token reduction per API call |
-| **Mechanism** | Markdown → MessagePack + SHA-256 | Text compression before sending |
-| **Token savings** | None (different purpose) | Up to 95% |
+| **Core language** | Python | Rust + Python bindings |
+| **Mechanism** | Markdown → MessagePack + SHA-256 | 6 compression algorithms (SmartCrusher, CodeCompressor, etc.) |
+| **Token savings** | None (different purpose) | 60–95% (benchmark-verified) |
+| **Integration** | CLAUDE.md / AGENTS.md protocol | Library, proxy, MCP server, agent wrapper |
+| **Cross-agent memory** | Via shared `work.md` | Built-in (Claude, Codex, Gemini) |
+
+Headroom also ships a `.claude-plugin` for direct Claude Code integration and an MCP server mode, making it a deeper fit for agent workflows than a simple compression utility.
 
 The two tools address complementary problems and can be used together.
 
-Headroom は AI に渡す前にテキストを可逆圧縮し、トークン消費を最大 95% 削減します。SyncLog-AI が解決するのは別の問題、**セッション間の一貫性**です。入力を圧縮するのではなく、作業状態のスナップショットを保持し、AI が前回の続きから矛盾なく再開できるようにします。両者は補完的に組み合わせて使えます。
+Headroom は Rust コアと Python バインディングで構成されたローカルファーストのコンテキスト圧縮レイヤーです。ツール出力・ログ・RAG チャンク・ファイルを LLM に届く前に可逆圧縮し（CCR）、トークンを 60〜95% 削減します。精度はベンチマーク上で維持または改善されています。
+
+SyncLog-AI が解決するのは別の問題、**セッション間の作業状態の一貫性**です。AI への入力を圧縮するのではなく、`work.md` のハッシュ検証済みスナップショットを保持し、AI が前回の続きから矛盾なく再開できるようにします。Headroom はクロスエージェントのメモリ共有機能も持ち、概念的に重なる部分がありますが、アプローチは異なります。両者は補完的に組み合わせて使えます。
 
 ## Features
 
