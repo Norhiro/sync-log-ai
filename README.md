@@ -16,6 +16,32 @@ Large AI-assisted projects often accumulate long Markdown histories. Reading the
 
 大規模な AI 共同作業では、Markdown の履歴が長くなりがちです。毎回すべての履歴を読み込むと、遅く、高コストで、整合性も崩れやすくなります。SyncLog-AI は人間向けログと機械向けスナップショットを分けることで、AI がより一貫した状態から作業を再開できるかを検証します。
 
+## Comparison with Headroom / Headroom との比較
+
+> Netflix のエンジニアが、AI のトークンを最大 95% カットする OSS を公開した。
+>
+> しかも精度は落ちない。元に戻せる「可逆圧縮」だから。
+>
+> Claude や Cursor を使っていると、地味にきついのがトークン消費。
+> 長いログ、RAG で取得したテキスト、複数ファイルの読み込み。
+> AI に渡すたびにトークンが溶けていく。
+>
+> その問題を、AI に渡す前に解決するのが「Headroom」。
+
+[Headroom](https://github.com/netflix/headroom) compresses text before sending it to AI — reversibly, with up to 95% token reduction per API call.
+
+SyncLog-AI solves a different problem: **session continuity**. It does not compress what you send to AI; instead it maintains a verified snapshot of your work state so agents can resume from a consistent point without re-reading the entire Markdown history.
+
+| | SyncLog-AI | Headroom |
+|---|---|---|
+| **Goal** | Session state consistency | Token reduction per API call |
+| **Mechanism** | Markdown → MessagePack + SHA-256 | Text compression before sending |
+| **Token savings** | None (different purpose) | Up to 95% |
+
+The two tools address complementary problems and can be used together.
+
+Headroom は AI に渡す前にテキストを可逆圧縮し、トークン消費を最大 95% 削減します。SyncLog-AI が解決するのは別の問題、**セッション間の一貫性**です。入力を圧縮するのではなく、作業状態のスナップショットを保持し、AI が前回の続きから矛盾なく再開できるようにします。両者は補完的に組み合わせて使えます。
+
 ## Features
 
 - **Binary-text sync / バイナリとテキストの同期**: Stores `work.md` in `.ai_context/memory.bin` as MessagePack.
