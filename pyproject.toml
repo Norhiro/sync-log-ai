@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synclogai"
+version = "0.1.0"
+description = "Binary-optimized, self-healing context management for AI-assisted development"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "msgpack>=1.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+synclogai = "synclogai.cli:main"
