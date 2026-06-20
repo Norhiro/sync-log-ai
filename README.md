@@ -18,15 +18,15 @@ Large AI-assisted projects often accumulate long Markdown histories. Reading the
 
 ## Comparison with Headroom / Headroom との比較
 
-> Netflix のエンジニアが、AI のトークンを最大 95% カットする OSS を公開した。
+> Netflixのエンジニアが、AIのトークンを最大 95% カットするOSSを公開しました。
 >
-> しかも精度は落ちない。元に戻せる「可逆圧縮」だから。
+> しかも「可逆圧縮」なので精度は落ちないと言われています。
 >
-> Claude や Cursor を使っていると、地味にきついのがトークン消費。
-> 長いログ、RAG で取得したテキスト、複数ファイルの読み込み。
-> AI に渡すたびにトークンが溶けていく。
+> Claude や Cursor の問題としてトークン消費が挙げられます。
+> 長いログ、RAG で取得したテキスト、複数ファイルの読み込みなど、
+> AIに渡すたびにトークンが消費され経済的負担にもなります。
 >
-> その問題を、AI に渡す前に解決するのが「Headroom」。
+> その問題を、AIに渡す前に解決するのが「Headroom」です。
 
 [Headroom](https://github.com/chopratejas/headroom) is a local-first context compression layer built on a Rust core with Python bindings. It compresses tool outputs, logs, RAG chunks, and files before they reach the LLM — reversibly (CCR: Cached Compressed Retrieval), with 60–95% token reduction. Benchmarks on GSM8K, TruthfulQA, and SQuAD v2 show accuracy is maintained or improved.
 
