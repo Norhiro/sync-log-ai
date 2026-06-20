@@ -73,9 +73,19 @@ Dependencies (`msgpack`, `PyYAML`) are installed automatically.
 
 ## Quick Start
 
-1. Write your current work state in `work.md`.
+1. Initialize a new directory:
 
-2. Synchronize:
+```bash
+synclogai init
+```
+
+This creates `work.md` and `rules.yaml` in the current directory. Skips files that already exist.
+
+カレントディレクトリに `work.md` と `rules.yaml` を生成します。既存ファイルはスキップします。
+
+2. Write your current work state in `work.md`.
+
+3. Synchronize:
 
 ```bash
 synclogai sync
@@ -83,7 +93,7 @@ synclogai sync
 
 This creates or updates `.ai_context/memory.bin` in the current directory.
 
-3. Audit:
+4. Audit:
 
 ```bash
 synclogai audit
@@ -91,7 +101,7 @@ synclogai audit
 
 If `work.md` and `.ai_context/memory.bin` differ, the snapshot is repaired automatically. Exit code `1` is returned after repair so CI or agents can detect drift.
 
-4. Probabilistic audit (for CI / agent hooks):
+5. Probabilistic audit (for CI / agent hooks):
 
 ```bash
 synclogai random-audit
